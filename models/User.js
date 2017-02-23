@@ -11,13 +11,6 @@ var UserSchema = new Schema({
     type: String,
     unique: true
   }
-  // notes property for the user
-  // ,savedArticles: [{
-  //   // Store ObjectIds in the array
-  //   type: Schema.Types.ObjectId,
-  //   // The ObjectIds will refer to the ids in the Note model
-  //   ref: "Article"
-  // }]
 });
 
 // Create the User model with the UserSchema

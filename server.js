@@ -91,7 +91,7 @@ app.get("/scrape", function(req, res) {
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this).children("a").text();
       result.link = $(this).children("a").attr("href");
-
+      result.saved = false;
       // Using our Article model, create a new entry
       // This effectively passes the result object to the entry (and the title and link)
       var entry = new Article(result);
@@ -118,7 +118,7 @@ app.get("/scrape", function(req, res) {
 // This will get the articles we scraped from the mongoDB
 app.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
-  Article.find({}, function(error, doc) {
+  Article.find({saved: false}, function(error, doc) {
     // Log any errors
     if (error) {
       console.log(error);
@@ -130,9 +130,10 @@ app.get("/articles", function(req, res) {
   });
 });
 
+
 app.get("/savedArticles", function(req, res) {
   // Grab every doc in the Articles array
-  SavedArticle.find({}, function(error, doc) {
+  Article.find({saved:true}, function(error, doc) {
     // Log any errors
     if (error) {
       console.log(error);
@@ -141,59 +142,28 @@ app.get("/savedArticles", function(req, res) {
     // Or send the doc to the browser as a json object
     else {
       //look up origArticle in the Article table
-      var result = [];
-      for(var i=0; i < doc.length; i++) {
-      Article.findOne({_id: doc[i].origArticle}, 
-      function(error, found) {
-        if(error) {
-          console.log(error);
-          res.json({"error": "Error retrieving a saved article"});
-        } else{
-          //result.push(found);
-          result.push({
-      title: found.title,
-      link: found.link
-    });
-console.log(result);
-        }
-      });
+      res.json(doc);
     }
-   
-    }
-  }).then(function(result){
- res.json(result);
-      });
+  });
 });
 
 
 // Create a new note or replace an existing note
 app.post("/saveArticle/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
-   var newSavedArticle = new SavedArticle();
-   newSavedArticle.origArticle = mongojs.ObjectID(req.params.id);
-   //newSavedArticle.notes = [{}];
-  // Save the new note to mongoose
-  newSavedArticle.save(function(error, doc) {
-    // Send any errors to the browser
-    if (error) {
-      res.json({"error":"Cannot save this article"});
-    }
-    // Otherwise
-    else {
-      // Find our user and push the new note id into the User's notes array
-      // User.findOneAndUpdate({}, { $push: { "notes": doc._id } }, { new: true }, function(err, newdoc) {
-      //   // Send any errors to the browser
-      //   if (err) {
-      //     res.send(err);
-      //   }
-      //   // Or send the newdoc to the browser
-      //   else {
-      //     res.send(newdoc);
-      //   }
-      // });
-      res.json(doc);
-    }
-  });
+  Article.findOneAndUpdate({
+    "_id": req.params.id
+  }, {"saved": true})
+  // Execute the above query
+    .exec(function (err, doc) {
+      // Log any errors
+      if (err) {
+        console.log(err);
+        res.json({"error": "Unable to save article"})
+      } else {
+        res.json(doc);
+      }
+    });
 });
 
 
@@ -201,7 +171,7 @@ app.post("/saveArticle/:id", function(req, res) {
 // Grab an article by it's ObjectId
 app.get("/savedArticles", function(req, res) {
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-  User.find({},{saved:true}, function(error, doc) {
+  Article.find({saved:true},{}, function(error, doc) {
     // Log any errors
     if (error) {
       //console.log(error);
