@@ -1,0 +1,29 @@
+{
+  "name": "myarticles",
+  "version": "1.0.0",
+  "description": "Uses Mongo/Node/Express",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ritudubey/MyArticles.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ritudubey/MyArticles/issues"
+  },
+  "homepage": "https://github.com/ritudubey/MyArticles#readme",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "cheerio": "^0.22.0",
+    "express": "^4.14.1",
+    "mongojs": "^2.4.0",
+    "mongoose": "^4.8.3",
+    "morgan": "^1.8.1",
+    "request": "^2.79.0"
+  }
+}
