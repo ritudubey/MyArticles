@@ -5,72 +5,32 @@
     <title>Scraping With Mongoose</title>
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
-
-    <style>
-      body { background-color: #F2F6D0 }
-      #wrapper {
-        width: 960px;
-        margin-left: auto;
-        margin-right: auto;
-        padding-top: 5%;
-      }
-      #articles {
-        display: inline-block;
-        overflow: auto;
-        width: 60%;
-        height: 700px;
-      }
-      #notes {
-        float: right;
-        width: 30%;
-      }
-      textarea, input {
-        display: block;
-        width: 100%;
-        background-color: #FCF5C7;
-      }
-      input {
-        height: 36px;
-        font-size: 24px;
-      }
-      textarea {
-        height: 200px;
-        font-size: 18px;
-      }
-    </style>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/assets/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   </head>
   <body>
   <nav>
     <div class="nav-wrapper">
       <a href="#" class="brand-logo right">Mongo Scraper</a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
-        <!--<li><a id="scrapeLinkId" href="/scrape">Scrape</a></li>
-        <li><a id="savedArticlesLinkId" href="/savedArticles">Saved Articles</a></li>
-        <li><a id="articlesLinkId" href="/articles">Articles</a></li>
-         <li><a id="deleteAllLinkId" href="/clearall">Delete all articles</a></li>-->
         <li><a id="scrapeLinkId">Scrape</a></li>
         <li><a id="savedArticlesLinkId">Saved Articles</a></li>
         <li><a id="articlesLinkId">Articles</a></li>
-         <li><a id="deleteAllLinkId" href="/clearall">Delete all articles</a></li>
+         <li><a id="deleteAllLinkId">Delete all articles</a></li>
       </ul>
     </div>
   </nav>
   <div id="scrapeId"> </div>
 
   <div class="container">
-        <div id="savedArticlesId"></div>
+
+        <div class="col s8" id="savedArticlesId"></div>
+         <div class="col s4" id="notes"></div>
   </div>
    <div class="container">
-        <div id="articlesId"></div>    
+        <div id="articlesId"></div>
    </div>  
-        <!--<div id="notes"></div>-->
-    <!--<div id="wrapper">
-      <h1>Note Scraper</h1>
-      <h2><i>If you can do this...the homework should be no problem.</i></h2>
-      <div id="articles"></div>
-      <div id="notes"></div>
-    </div>-->
+
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script src="app.js"></script>

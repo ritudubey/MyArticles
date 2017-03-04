@@ -8,16 +8,16 @@ var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 var mongojs = require("mongojs");
-// Requiring our Note and Article models
-var Note = require("./models/Note.js");
-var Article = require("./models/Article.js");
-var SavedArticle = require("./models/SavedArticle.js");
-var User = require("./models/User.js");
 // Our scraping tools
 var request = require("request");
 var cheerio = require("cheerio");
 // Mongoose mpromise deprecated - use bluebird promises
 var Promise = require("bluebird");
+
+// Requiring our Note and Article models
+var Note = require("./models/Note.js");
+var Article = require("./models/Article.js");
+var User = require("./models/User.js");
 
 mongoose.Promise = Promise;
 
@@ -35,7 +35,9 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/myarticledb");
+//mongoose.connect("mongodb://localhost/myarticledb");
+mongoose.connect("mongodb://heroku_gmgmz858:3eqfi5p2opd6hpnp2u0c32ddig@ds113630.mlab.com:13630/heroku_gmgmz858");
+
 var db = mongoose.connection;
 
 // Show any mongoose errors
@@ -111,7 +113,6 @@ app.get("/scrape", function(req, res) {
     });
   });
   // Tell the browser that we finished scraping the text
-  //res.send("<p>Scrape Complete</p>");
   res.json("Scrape Complete");
 });
 
@@ -167,30 +168,12 @@ app.post("/saveArticle/:id", function(req, res) {
 });
 
 
-
-// Grab an article by it's ObjectId
-app.get("/savedArticles", function(req, res) {
-  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-  Article.find({saved:true},{}, function(error, doc) {
-    // Log any errors
-    if (error) {
-      //console.log(error);
-       res.send(error);
-    }
-    // Or send the doc to the browser as a json object
-    else {
-      //res.json(doc);
-       res.send(doc);
-    }
-  });
-});
-
 // Grab an article by it's ObjectId
 app.get("/articles/:id", function(req, res) {
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-  User.findOne({ "name": req.params.id })
+  Article.findOne({ "_id": req.params.id })
   // ..and populate all of the notes associated with it
-  .populate("note")
+  .populate("notes")
   // now, execute our query
   .exec(function(error, doc) {
     // Log any errors
@@ -205,31 +188,43 @@ app.get("/articles/:id", function(req, res) {
 });
 
 // Delete One from the DB
-app.get("/articles/delete/:id", function(req, res) {
-  // Remove a note using the objectID
-  User.remove({
-    "savedArticles._id": mongojs.ObjectID(req.params.id)
-  }, function(error, removed) {
+app.post("/deleteArticle/:id", function(req, res) {
+  Article.update({"_id": req.params.id}, 
+  update={"saved" : false, "notes" : []},
+  options = {multi: false},
+  function(error, numeffected) {
     // Log any errors from mongojs
     if (error) {
       console.log(error);
-      res.send(error);
+      res.json({"error":error});
     }
     // Otherwise, send the mongojs response to the browser
     // This will fire off the success function of the ajax request
     else {
-      console.log(removed);
-      res.send(removed);
+      console.log(numeffected);
+      res.json({"result" : numeffected});
     }
   });
 });
 
-
-// Clear the DB
-app.get("/clearall", function(req, res) {
-  // Remove every note from the notes collection
-    User.update({}, { $set : {'savedArticles': [] }} , {multi:true} );
+  app.delete('/clearall', function (req, res) {
+  Article.remove(function (err) {
+    if (!err) {
+      console.log("removed Articles");
+      Note.remove(function (err) {
+        if (!err) {
+      console.log("removed Notes");
+      res.json("Delete successful");
+        }else {
+          console.log(err);
+        }
+      });
+    } else {
+      console.log(err);
+    }
   });
+});
+
 
 
 // Create a new note or replace an existing note
@@ -247,7 +242,7 @@ app.post("/articles/:id", function(req, res) {
     else {
       // Use the article id to find and update it's note
       Article.findOneAndUpdate({ "_id": mongojs.ObjectID(req.params.id) }, 
-      { "note": doc._id })
+      { $push: { "notes": doc._id } })
       // Execute the above query
       .exec(function(err, doc) {
         // Log any errors
@@ -256,7 +251,7 @@ app.post("/articles/:id", function(req, res) {
         }
         else {
           // Or send the document to the browser
-          res.send(doc);
+          res.json(doc);
         }
       });
     }
@@ -265,6 +260,6 @@ app.post("/articles/:id", function(req, res) {
 
 
 // Listen on port 3000
-app.listen(3000, function() {
-  console.log("App running on port 3000!");
+app.listen(8080, function() {
+  console.log("App running on port 8080!");
 });

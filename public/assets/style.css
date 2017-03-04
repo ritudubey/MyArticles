@@ -1,0 +1,98 @@
+
+      body { background-color: #F2F6D0 }
+      /*#wrapper {
+        width: 960px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 5%;
+      }*/
+      button {
+          margin :20px;
+      }
+      /*#savedArticlesId {
+        display: inline-block;
+        overflow: auto;
+        width: 60%;
+        height: auto;
+        background-color: mediumpurple
+      }
+      #notes {
+        float: right;
+        width: 30%;
+      }*/
+
+      textarea, input {
+        display: block;
+        width: 100%;
+        background-color: #FCF5C7;
+      }
+      input {
+        height: 36px;
+        font-size: 24px;
+      }
+      textarea {
+        height: 200px;
+        font-size: 18px;
+      }
+    /**************/
+    #title {
+    text-align: center;
+    background-image: url("../images/star_background.jpg");
+    color: white;
+    padding: 200px;
+}
+
+@font-face {
+	font-family: StarWarsFont;
+	src: url(../fonts/SF%20Distant%20Galaxy%20Outline%20Italic.ttf) format('truetype');
+}
+
+.starwars-font {
+	font-family: StarWarsFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+	color: yellow;
+    font-size: 48px;
+}
+
+#articlesId {
+     font-size: 18px;
+    text-align: center;
+    color: white;
+    background-color: lightcoral;
+}
+
+#savedArticlesId {
+     font-size: 18px;
+    text-align: center;
+    color: white;
+    background-color: springgreen;
+}
+
+.articleHeading {
+    overflow: auto;
+    font-size: 24px;
+}
+
+.articleBody {
+    font-size: 18px;
+}
+
+.articleLink {
+    color: white;
+}
+
+#scrapeModalBody {
+    font-size: 32px;
+    text-align: center;
+}
+
+.articleNotesButton {
+    background: purple;
+}
+
+#notesTitle, .noteBody {
+    text-align: center;
+}
+
+.noteRecord {
+    overflow: auto;
+}
