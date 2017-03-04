@@ -19,6 +19,8 @@ var Note = require("./models/Note.js");
 var Article = require("./models/Article.js");
 var User = require("./models/User.js");
 
+var PORT = process.env.PORT || 8080;
+
 mongoose.Promise = Promise;
 
 
@@ -260,6 +262,6 @@ app.post("/articles/:id", function(req, res) {
 
 
 // Listen on port 3000
-app.listen(8080, function() {
-  console.log("App running on port 8080!");
+app.listen(PORT, function() {
+  console.log("App running on port "+PORT);
 });
